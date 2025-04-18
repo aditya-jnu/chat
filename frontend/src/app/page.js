@@ -22,6 +22,7 @@ export default function Home() {
         }
       })
       console.log("info ",response.data)
+      router.push(`/dashboard/${username}`);
     }
     catch(err){
       console.log("Error in signin ",err)
