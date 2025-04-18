@@ -79,9 +79,9 @@ exports.signIn = async (req, res) => {
       console.log("PASSWORD VALID")
       // Generate JWT token
       const token = jwt.sign(
-        { userId: userExist._id, userName: userExist.username }, // Payload with necessary user data
-        process.env.JWT_SECRET, // Secret key from environment variables
-        { expiresIn: '1h' } // Token expiry time (optional)
+        { userId: userExist._id, userName: userExist.username, fullName: userExist.fullname },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
       );
       return res.status(200).json({
         success: true,

@@ -2,9 +2,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setUserinfo } from '@/components/redux/slices/userslice';
 
 export default function Home() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
@@ -21,7 +24,10 @@ export default function Home() {
           'Content-Type': 'application/json'
         }
       })
-      console.log("info ",response.data)
+      console.log("info after signin",response.data)
+      localStorage.setItem('token', response.data.token);
+      console.log("action object ",setUserinfo({fullname:response.data.user.fullname, username:response.data.user.username, _id:response.data.user._id}))
+      dispatch(setUserinfo({fullname:response.data.user.fullname, username:response.data.user.username, _id:response.data.user._id}));
       router.push(`/dashboard/${username}`);
     }
     catch(err){

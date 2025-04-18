@@ -1,4 +1,5 @@
 import "./globals.css";
+import AppInit from "@/components/jwtrestore/Appinit";
 import Providers from "@/components/redux/Provider";
 
 export const metadata = {
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
       <Providers>
+        <AppInit/>
         {children}
       </Providers>
       </body>
