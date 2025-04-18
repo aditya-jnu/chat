@@ -1,38 +1,54 @@
-// "use client"
-// import React, { useState } from 'react';
-// import Chat from './Chat';
-// import { useNavigate } from 'react-router-dom';
+"use client"
+import React, { useState } from 'react';
+import Page from '@/app/dashboard/[username]/page';
+import { useRouter } from "next/navigation";
 
-// export default function InputBox() {
-//     const navigate = useNavigate();
-//     const [roomCode, setRoomCode] = useState('');
+export default function InputBox() {
+    const router = useRouter()
+    const [roomCode, setRoomCode] = useState('');
 
-//     const handleJoinRoom = () => {
-//         if (roomCode.trim()) {
-//             console.log(`Joining room with code: ${roomCode}`);
-//             navigate(`/room/${roomCode}`)
-//         } else {
-//             alert('Please enter a valid room code to join.');
-//         }
-//     };
+    const handleJoinRoom = () => {
+        if (roomCode.trim()) {
+            console.log(`Joining room with code: ${roomCode}`);
+            router.push(`/room/${roomCode}`)
+        } else {
+            alert('Please enter a valid room code to join.');
+        }
+    };
 
-//     return (
-//         <div className='h-screen w-screen bg-black flex flex-col gap-5 justify-center items-center'>
-//             <p className='text-white font-bold text-4xl'>Party Karyalay</p>
-//             <div className="p-5 border rounded-lg max-w-md">
-//                 <div className=" mb-5">
-//                     <input type="text" placeholder="Enter room code" value={roomCode} 
-//                         onChange={(e) => setRoomCode(e.target.value)}
-//                         className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                     />
-//                 </div>
-//                 <div className='flex justify-center'>
-//                     <button onClick={handleJoinRoom}
-//                     className="px-6 py-2 mr-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                     >Join Room</button>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
+    const handleCreateRoom = () =>{
+        const room = Math.floor(10000 + Math.random() * 90000).toString();
+        console.log("Generated Room Code:", roomCode);
+        setRoomCode(room)
+        console.log(`Joining room with code: ${room}`);
+        router.push(`/room/${room}`)
+    }
+
+    return (
+        <div className='min-h-[calc(100vh-80px)] w-screen bg-black p-2 flex flex-col items-center gap-20'>
+            <p className='text-white font-semibold text-xl'>Create your own room or join with a room code</p>
+            <div className="flex flex-col items-center gap-5 p-8 rounded-xl bg-white w-80 text-black">
+                {/* joining with a code */}
+                <div className='flex flex-col gap-2 w-50'>
+                    <input type="text" placeholder="Enter room code" value={roomCode} 
+                        onChange={(e) => setRoomCode(e.target.value)}
+                        className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button onClick={handleJoinRoom}
+                    className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                    >Join Room</button>
+                </div>
+                
+                <p>or</p>
+
+                {/* creating a room */}
+                <div className='flex flex-col w-50'>
+                    <button onClick={handleCreateRoom}
+                    className="p-2 rounded-lg bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+                    >Create Room</button>
+                </div>
+            </div>
+        </div>
+    );
+}
 

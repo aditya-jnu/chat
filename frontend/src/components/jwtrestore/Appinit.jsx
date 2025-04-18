@@ -19,7 +19,7 @@ export default function AppInit() {
         },
       })
       .then((response) => {
-        console.log("User got from token ",response.data)
+        console.log("User got from token ",response.data.user)
         console.log("action object seding from token ",setUserinfo(response.data.user))
         dispatch(setUserinfo(response.data.user));
       })
