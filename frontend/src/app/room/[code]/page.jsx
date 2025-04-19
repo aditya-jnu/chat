@@ -43,7 +43,8 @@ export default function Page({ params }) {
         try{
             const localVideoTrack = await Video.createLocalVideoTrack();
             const localAudioTrack = await Video.createLocalAudioTrack();
-            setLocalTracks([localVideoTrack, localAudioTrack]);
+            const actualTracks = Array.from(connectedRoom.localParticipant.tracks.values()).map(p => p.track);
+            setLocalTracks(actualTracks);
 
             const connectedRoom = await Video.connect(token, {
                 name: room,
