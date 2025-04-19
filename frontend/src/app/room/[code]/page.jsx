@@ -32,7 +32,7 @@ export default function Page({ params }) {
 
     const identity = user ? user.fullname: "user";
     console.log("user ", identity)
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;   
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://chat-ah4i.onrender.com";   
     
     const joinRoom = async() =>{
         try{

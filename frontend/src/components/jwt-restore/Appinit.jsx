@@ -5,7 +5,7 @@ import axios from "axios";
 import { setUserinfo, setLoad } from "../redux/slices/userslice";
 
 export default function AppInit() {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://chat-ah4i.onrender.com";
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userinfo);
 
