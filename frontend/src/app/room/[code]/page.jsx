@@ -143,7 +143,7 @@ export default function Page({ params }) {
         <div><Nav/></div>
         <div className='bg-black min-h-[calc(100vh-80px)] w-screen p-2'>
             <div className="flex justify-center"><button className="bg-white p-2 rounded-xl cursor-pointer" onClick={handleCopy}>Copy room link</button></div>
-            <div className="flex flex-wrap justify-start gap-2">
+            <div className="flex flex-wrap justify-start items-start gap-2">
                 {/* ***** remote participant ***** */}
                 <div id="remote-video-container" className='border m-1'>
                     {remoteParticipants.map(({ track, identity, }, index) =>
