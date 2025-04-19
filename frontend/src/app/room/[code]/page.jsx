@@ -43,8 +43,7 @@ export default function Page({ params }) {
         try{
             const localVideoTrack = await Video.createLocalVideoTrack();
             const localAudioTrack = await Video.createLocalAudioTrack();
-            const actualTracks = Array.from(connectedRoom.localParticipant.tracks.values()).map(p => p.track);
-            setLocalTracks(actualTracks);
+            setLocalTracks([localVideoTrack, localAudioTrack]);
 
             const connectedRoom = await Video.connect(token, {
                 name: room,
@@ -131,15 +130,9 @@ export default function Page({ params }) {
 
     const toggleMute = () => {
         const audioTrack = localTracks.find(track => track.kind === 'audio');
-        console.log(audioTrack)
-        if (!audioTrack) {
-            console.warn("No audio track found");
-            return;
-        }
-        const newEnabledState = !audioTrack.enabled;
-        audioTrack.enabled = newEnabledState;
-        setIsAudioMuted(!newEnabledState);
-        console.log("Toggled mute. Track enabled:", newEnabledState);
+        if(!isAudioMuted) audioTrack.disable()
+        else audioTrack.enable();
+        setIsAudioMuted(!isAudioMuted); 
     };
 
     if(load) return <div className="min-h-screen flex justify-center items-center">Loading......</div>

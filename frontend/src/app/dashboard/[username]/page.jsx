@@ -10,8 +10,6 @@ export default function Page({ params }) {
   const { username } = use(params);
   const user = useSelector((state) => state.user.userinfo);
   const load = useSelector((state) => state.user.load)
-  console.log("user", user);
-  console.log("load ",load);
 
   useEffect(() => {
     if (!load && !user) {

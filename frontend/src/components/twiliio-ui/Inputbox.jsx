@@ -17,9 +17,7 @@ export default function InputBox() {
 
     const handleCreateRoom = () =>{
         const room = Math.floor(10000 + Math.random() * 90000).toString();
-        console.log("Generated Room Code:", roomCode);
         setRoomCode(room)
-        console.log(`Joining room with code: ${room}`);
         router.push(`/room/${room}`)
     }
 

@@ -7,11 +7,8 @@ export default function Nav() {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.userinfo);
     const load = useSelector((state) => state.user.load)
-    console.log("user", user);
-    console.log("load ",load);
 
     function handleLogout(){
-        console.log(clearUserinfo())
         dispatch(clearUserinfo())
     }
 

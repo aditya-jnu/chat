@@ -11,7 +11,6 @@ export default function AppInit() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("token ",token)
     if (!token || user){
       dispatch(setLoad(false));
       return;
@@ -23,8 +22,6 @@ export default function AppInit() {
         },
       })
       .then((response) => {
-        console.log("User got from token ",response.data.user)
-        console.log("action object seding from token ",setUserinfo(response.data.user))
         dispatch(setUserinfo(response.data.user));
       })
       .catch((err) => {
