@@ -5,6 +5,7 @@ import axios from "axios";
 import { setUserinfo, setLoad } from "../redux/slices/userslice";
 
 export default function AppInit() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userinfo);
 
@@ -16,7 +17,7 @@ export default function AppInit() {
       return;
     }
 
-    axios.get("http://localhost:4000/api/v1/me", {
+    axios.get(`${baseUrl}/api/v1/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

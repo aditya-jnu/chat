@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const dbConnect=()=>{
     const uri = process.env.DATABASE_URL;
-    console.log("URI ",uri) // Check if DATABASE_URL is properly set
+    console.log("URI ",uri)
         if (!uri) {
             throw new Error('DATABASE_URL is not defined in environment variables');
         }

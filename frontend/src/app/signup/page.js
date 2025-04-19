@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios'
 
 export default function page() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [fullname, setFullname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +12,7 @@ export default function page() {
   async function handleSignup(e) {
     e.preventDefault();
     try{
-        const response = await axios.post("http://localhost:4000/api/v1/signup",{
+        const response = await axios.post(`${baseUrl}/api/v1/signup`,{
           fullname:fullname,
           username:username, 
           password:password

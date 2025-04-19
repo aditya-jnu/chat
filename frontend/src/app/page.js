@@ -6,16 +6,19 @@ import { useDispatch } from 'react-redux';
 import { setUserinfo } from '@/components/redux/slices/userslice';
 
 export default function Home() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const router = useRouter();
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
+    setLoading(true)
     try{
-      const response = await axios.post("http://localhost:4000/api/v1/signin",{
+      const response = await axios.post(`${baseUrl}/api/v1/signin`,{
         username:username, 
         password:password
       },
@@ -31,12 +34,14 @@ export default function Home() {
       router.push(`/dashboard/${username}`);
     }
     catch(err){
+      setLoading(false)
       console.log("Error in signin ",err)
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#3d5769]">
+      {loading ? <div className='text-white font-bold text-xl'>Loading.....</div> : 
       <form onSubmit={handleLogin} className="space-y-4 p-8 rounded-xl bg-white w-1/3">
         <h2 className="text-2xl font-bold">Login</h2>
         <input type="username" placeholder="enter your username" required
@@ -49,6 +54,7 @@ export default function Home() {
           Don't have an account? <a href="/signup" className="text-blue-600">Signup</a>
         </p>
       </form>
+      }
     </div>
   );
 }

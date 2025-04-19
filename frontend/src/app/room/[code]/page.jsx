@@ -32,7 +32,7 @@ export default function page({ params }) {
 
     const identity = user ? user.fullname: "user";
     console.log("user ", identity)
-    const baseUrl = "http://localhost:4000";   
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;   
     
     const joinRoom = async() =>{
         try{
