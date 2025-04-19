@@ -143,13 +143,12 @@ export default function Page({ params }) {
         <div><Nav/></div>
         <div className='bg-black min-h-[calc(100vh-80px)] w-screen p-2'>
             <div className="flex justify-center"><button className="bg-white p-2 rounded-xl cursor-pointer" onClick={handleCopy}>Copy room link</button></div>
-            <div>
-
+            <div className="flex flex-wrap justify-start gap-2">
                 {/* ***** remote participant ***** */}
                 <div id="remote-video-container" className='border m-1'>
                     {remoteParticipants.map(({ track, identity, }, index) =>
                         track.kind === 'video' ? (
-                        <div key={index} className="w-[330px] border rounded-xl p-1 bg-white">
+                        <div key={index} className="w-[280px] border rounded-xl p-1 bg-white">
                         <video key={index}
                             ref={(video) => {
                                 if(video){
@@ -182,7 +181,7 @@ export default function Page({ params }) {
                 </div>
 
                 {/* ***** local participant ***** */}
-                <div className='w-[330px] border rounded-xl  bg-white'>
+                <div className='w-[280px] border rounded-xl bg-white'>
                     <div id="local-video-container" className='rounded-xl'>
                         {localTracks.map((track, index) =>
                         track.kind === 'video' ? (
@@ -198,7 +197,6 @@ export default function Page({ params }) {
                                     };
                                 }
                             }}
-                            height="240"
                             muted
                         />
                         ) : null
