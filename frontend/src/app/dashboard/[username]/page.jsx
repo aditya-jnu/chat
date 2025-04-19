@@ -1,65 +1,30 @@
 "use client";
 import React, {use, useEffect, useState} from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { FaRegUser } from "react-icons/fa";
-import { clearUserinfo } from "@/components/redux/slices/userslice";
+import { useSelector } from "react-redux";
 import InputBox from "@/components/twiliio-ui/Inputbox";
+import Nav from "@/components/ui/Nav";
 
 export default function Page({ params }) {
   const router = useRouter()
   const { username } = use(params);
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userinfo);
-  const [isLoading, setIsLoading] = useState(true);
+  const load = useSelector((state) => state.user.load)
   console.log("user", user);
+  console.log("load ",load);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (!isLoading && !user) {
+    if (!load && !user) {
       router.push("/");
     }
-  },[isLoading, user])
+  },[load, user, router])
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!user) {
-    return <div>Redirecting...</div>;
-  }
-
-  function handleLogout(){
-    console.log(clearUserinfo())
-    dispatch(clearUserinfo())
-  }
-
+  if(load)return <div className="min-h-screen flex justify-center items-center">Loading......</div>
+  if(!user)return <div className="min-h-screen flex justify-center items-center">Redirecting......</div>
+  
   return (
     <div>
-      {/* ***** navbar ***** */}
-      <nav className="bg-[#3d5769] text-white p-4 flex justify-between items-center shadow-md h-[80px]">
-        <div className="flex items-center gap-2 text-lg font-medium">
-            {/* <User className="w-5 h-5" /> */}
-            <span>Hello {user?.fullname || "User"}</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <div className="flex items-center gap-1">
-            <FaRegUser/>
-            <p>{user.username}</p>
-          </div>
-          <button onClick={handleLogout}
-           className="p-1 rounded-lg text-white hover:bg-[#2e4451] flex justify-center items-center cursor-pointer"
-          >Logout
-          </button>
-        </div>
-        
-      </nav>
-      {/* ****room-code enter */}
+      <Nav/>
       <InputBox/>
     </div>
   );

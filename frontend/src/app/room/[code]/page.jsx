@@ -1,9 +1,12 @@
 "use client";
 import React, {use, useEffect, useState} from "react";
 import { useSelector } from "react-redux";
-import Video from 'twilio-video'
+import { useRouter } from "next/navigation";
+import Video from 'twilio-video';
+import Nav from "@/components/ui/Nav";
 
 export default function page({ params }) {
+    const router = useRouter()
     const { code } = use(params);
     const [room, setRoom] = useState(null);
     const [token, setToken] = useState(null);
@@ -12,13 +15,23 @@ export default function page({ params }) {
     const [isConnected, setIsConnected] = useState(false);
 
     const user = useSelector((state) => state.user.userinfo);
+    const load = useSelector((state) => state.user.load)
+    console.log("user", user);
+    console.log("load ",load);
+
+    useEffect(() => {
+        if (!load && !user) {
+          router.push("/");
+        }
+    },[load, user, router])
 
     useEffect(()=>{
         console.log("roomcode ",code)
         setRoom(code)
     },[code])
+
     const identity = user ? user.fullname: "user";
-    console.log(user, identity)
+    console.log("user ", identity)
     const baseUrl = "http://localhost:4000";   
     
     const joinRoom = async() =>{
@@ -55,8 +68,6 @@ export default function page({ params }) {
         }
     }
 
-
-    
     const fetchToken = async () => {
         console.log("Fetching token......")
         try {
@@ -77,8 +88,6 @@ export default function page({ params }) {
 
     useEffect(() => {
         if (token && !isConnected) {
-            
-
             joinRoom();
         }
     }, [token]);
@@ -120,8 +129,13 @@ export default function page({ params }) {
         }
     };
 
+    if(load) return <div className="min-h-screen flex justify-center items-center">Loading......</div>
+    if(!user)return <div className="min-h-screen flex justify-center items-center">Redirecting......</div>
+    
     return (
-        <div className='bg-black min-h-screen w-screen p-5'>
+        <div>
+        <div><Nav/></div>
+        <div className='bg-black min-h-[calc(100vh-80px)] w-screen p-5'>
             <p className='text-white font-bold text-3xl text-center mb-5'>Room Code is <span className='italic font-normal font-serif'>{code}</span></p>
             <div>
                 <div id="remote-video-container" className='border w-[320px] m-1'>
@@ -182,6 +196,6 @@ export default function page({ params }) {
                 </div>
             </div>
         </div>
-        
+        </div>
     );
 };

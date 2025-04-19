@@ -1,5 +1,5 @@
 import "./globals.css";
-import AppInit from "@/components/jwtrestore/Appinit";
+import AppInit from "@/components/jwt-restore/Appinit";
 import Providers from "@/components/redux/Provider";
 
 export const metadata = {

@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { setUserinfo } from "../redux/slices/userslice";
+import { setUserinfo, setLoad } from "../redux/slices/userslice";
 
 export default function AppInit() {
   const dispatch = useDispatch();
@@ -11,7 +11,10 @@ export default function AppInit() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     console.log("token ",token)
-    if (!token || user) return;
+    if (!token || user){
+      dispatch(setLoad(false));
+      return;
+    }
 
     axios.get("http://localhost:4000/api/v1/me", {
         headers: {
@@ -26,6 +29,7 @@ export default function AppInit() {
       .catch((err) => {
         console.error("Invalid or expired token", err);
         localStorage.removeItem("token");
+        dispatch(setLoad(false));
       });
   }, [dispatch, user]);
 
