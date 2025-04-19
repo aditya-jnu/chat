@@ -147,8 +147,9 @@ export default function Page({ params }) {
     const toggleMute = () => {
         const audioTrack = localTracks.find(track => track.kind === 'audio');
         if (audioTrack) {
-            audioTrack.enabled = !audioTrack.enabled;
-            setIsAudioMuted(!audioTrack.enabled);
+            const willMute = audioTrack.enabled;
+            audioTrack.enabled = !willMute;
+            setIsAudioMuted(willMute);
         }
     };
 
