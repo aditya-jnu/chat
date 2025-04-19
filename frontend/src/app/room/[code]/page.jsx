@@ -19,8 +19,6 @@ export default function Page({ params }) {
 
     const user = useSelector((state) => state.user.userinfo);
     const load = useSelector((state) => state.user.load)
-    console.log("user", user);
-    console.log("load ",load);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -35,12 +33,10 @@ export default function Page({ params }) {
     },[load, user, router])
 
     useEffect(()=>{
-        console.log("roomcode ",code)
         setRoom(code)
     },[code])
 
     const identity = user ? user.username: "user";
-    console.log("user ", identity)
     const baseUrl = "https://chat-ah4i.onrender.com";   
     
     const joinRoom = async() =>{
@@ -78,16 +74,11 @@ export default function Page({ params }) {
     }
 
     const fetchToken = async () => {
-        console.log("Fetching token......")
         try {
-            if (token) {
-                console.log("prev token ",token)
-                joinRoom();
-            }
+            if (token) joinRoom();
             else{
                 const response = await fetch(`${baseUrl}/api/v1/room?identity=${identity}&room=${room}`);
                 const data = await response.json();
-                console.log("new token ",data)
                 setToken(data.token);
             }
         } catch (error) {
@@ -96,13 +87,10 @@ export default function Page({ params }) {
     };
 
     useEffect(() => {
-        if (token && !isConnected) {
-            joinRoom();
-        }
+        if (token && !isConnected) joinRoom();
     }, [token]);
 
     const handleParticipantConnected = (participant) => {
-        console.log(`Participant connected: ${participant.identity}`);
         participant.tracks.forEach((publication) => {
             if (publication.isSubscribed) {
                 handleTrackSubscribed(publication.track, participant.identity);
@@ -113,7 +101,6 @@ export default function Page({ params }) {
     };
 
     const handleParticipantDisconnected = (participant) => {
-        console.log(`Participant disconnected: ${participant.identity}`);
         setRemoteParticipants((prevParticipants) =>
             prevParticipants.filter((p) => p.participant !== participant)
         );
@@ -133,24 +120,25 @@ export default function Page({ params }) {
     };
 
     const handleLeaveRoom = () => {
-        if (room) {
-            room.disconnect();
-        }
+        if(room) room.disconnect();
     };
 
     const handleCopy = () => {
-        console.log("shareLink ", shareLink)
         navigator.clipboard.writeText(shareLink);
         alert('Link copied to clipboard!');
     };
 
     const toggleMute = () => {
         const audioTrack = localTracks.find(track => track.kind === 'audio');
-        if (audioTrack) {
-            const willMute = audioTrack.enabled;
-            audioTrack.enabled = !willMute;
-            setIsAudioMuted(willMute);
+        console.log(audioTrack)
+        if (!audioTrack) {
+            console.warn("No audio track found");
+            return;
         }
+        const newEnabledState = !audioTrack.enabled;
+        audioTrack.enabled = newEnabledState;
+        setIsAudioMuted(!newEnabledState);
+        console.log("Toggled mute. Track enabled:", newEnabledState);
     };
 
     if(load) return <div className="min-h-screen flex justify-center items-center">Loading......</div>
