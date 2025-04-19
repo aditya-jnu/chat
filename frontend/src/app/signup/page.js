@@ -1,8 +1,9 @@
 "use client"
 import { useState } from 'react';
 import axios from 'axios'
+import Link from 'next/link';
 
-export default function page() {
+export default function Page() {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [fullname, setFullname] = useState('');
   const [username, setUsername] = useState('');
@@ -40,7 +41,7 @@ export default function page() {
           {msg && <p className="text-red-500">{msg}</p>}
           <button className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer">Signup</button>
           <p className="text-sm">
-            Already have an account? <a href="/" className="text-blue-600">Login</a>
+            Already have an account? <Link href="/" className="text-blue-600">Login</Link>
           </p>
         </form>
       </div>

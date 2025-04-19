@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setUserinfo } from '@/components/redux/slices/userslice';
+import Link from 'next/link';
 
 export default function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -51,7 +52,7 @@ export default function Home() {
         {msg && <p className="text-red-500">{msg}</p>}
         <button className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">Login</button>
         <p className="text-sm">
-          Don't have an account? <a href="/signup" className="text-blue-600">Signup</a>
+          Don&#39;t have an account? <Link href="/signup" className="text-blue-600">Signup</Link>
         </p>
       </form>
       }

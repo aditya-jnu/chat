@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Video from 'twilio-video';
 import Nav from "@/components/ui/Nav";
 
-export default function page({ params }) {
+export default function Page({ params }) {
     const router = useRouter()
     const { code } = use(params);
     const [room, setRoom] = useState(null);

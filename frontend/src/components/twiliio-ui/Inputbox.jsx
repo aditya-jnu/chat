@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import Page from '@/app/dashboard/[username]/page';
 import { useRouter } from "next/navigation";
 
 export default function InputBox() {
