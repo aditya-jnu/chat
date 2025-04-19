@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Video from 'twilio-video';
 import Nav from "@/components/ui/Nav";
+import { FaRegUser } from "react-icons/fa";
 
 export default function Page({ params }) {
     const router = useRouter()
@@ -14,6 +15,7 @@ export default function Page({ params }) {
     const [remoteParticipants, setRemoteParticipants] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
     const [shareLink, setLink] = useState('')
+    const [isAudioMuted, setIsAudioMuted] = useState(false);
 
     const user = useSelector((state) => state.user.userinfo);
     const load = useSelector((state) => state.user.load)
@@ -142,6 +144,14 @@ export default function Page({ params }) {
         alert('Link copied to clipboard!');
     };
 
+    const toggleMute = () => {
+        const audioTrack = localTracks.find(track => track.kind === 'audio');
+        if (audioTrack) {
+            audioTrack.enabled = !audioTrack.enabled;
+            setIsAudioMuted(!audioTrack.enabled);
+        }
+    };
+
     if(load) return <div className="min-h-screen flex justify-center items-center">Loading......</div>
     if(!user)return <div className="min-h-screen flex justify-center items-center">Redirecting......</div>
     
@@ -157,7 +167,6 @@ export default function Page({ params }) {
                     {remoteParticipants.map(({ track, identity, }, index) =>
                         track.kind === 'video' ? (
                         <div key={index} className="w-[330px] border rounded-xl p-1 bg-white">
-                        <p>{identity}</p>
                         <video key={index}
                             ref={(video) => {
                                 if(video){
@@ -173,6 +182,7 @@ export default function Page({ params }) {
                             width="320"
                             height="240"
                         />
+                        <p className="text-black flex items-center gap-1"><span><FaRegUser/></span><span>{identity}</span></p>
                         </div>
                         ) : 
                         track.kind === 'audio' ? (
@@ -189,8 +199,8 @@ export default function Page({ params }) {
                 </div>
 
                 {/* ***** local participant ***** */}
-                <div className='w-[330px] border rounded-xl p-1 bg-white'>
-                    <div id="local-video-container" className='mb-1 rounded-xl'>
+                <div className='w-[330px] border rounded-xl  bg-white'>
+                    <div id="local-video-container" className='rounded-xl'>
                         {localTracks.map((track, index) =>
                         track.kind === 'video' ? (
                         <video key={index}
@@ -205,7 +215,6 @@ export default function Page({ params }) {
                                     };
                                 }
                             }}
-                            width="320"
                             height="240"
                             muted
                         />
@@ -214,14 +223,21 @@ export default function Page({ params }) {
                     </div>
                     <div>
                         {isConnected ? 
-                        (<div className="flex items-center justify-between">
-                            <p className="text-black">{identity?identity:null}</p>
+                        (<div className="flex items-center justify-between m-1">
+                            <p className="text-black flex items-center gap-1"><span><FaRegUser/></span><span>{identity?identity:null}</span></p>
+                            <div className="flex gap-1">
+                            <button onClick={toggleMute}
+                             className="p-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                            >
+                            {isAudioMuted ? 'Unmute' : 'Mute'}
+                            </button>
                             <button onClick={handleLeaveRoom}
                              className="p-2 rounded-xl bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer">
                             Leave Room</button>
+                            </div>
                         </div>):
                         (<button onClick={fetchToken} disabled={isConnected}
-                        className='px-6 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500'>
+                        className='w-full p-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer'>
                         Start Video Call
                         </button>)
                         }
