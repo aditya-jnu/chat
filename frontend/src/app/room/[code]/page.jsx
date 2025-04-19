@@ -161,7 +161,6 @@ export default function Page({ params }) {
                                     };
                                 }
                             }}
-                            width="320"
                             height="240"
                         />
                         <p className="text-black flex items-center gap-1"><span><FaRegUser/></span><span>{identity}</span></p>
@@ -197,6 +196,7 @@ export default function Page({ params }) {
                                     };
                                 }
                             }}
+                            height="240"
                             muted
                         />
                         ) : null
