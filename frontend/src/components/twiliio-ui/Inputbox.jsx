@@ -24,8 +24,7 @@ export default function InputBox() {
     }
 
     return (
-        <div className='min-h-[calc(100vh-80px)] w-screen bg-black p-2 flex flex-col items-center gap-20'>
-            <p className='text-white font-semibold text-xl'>Create your own room or join with a room code</p>
+        <div className='min-h-[calc(100vh-80px)] w-screen bg-black p-2 flex flex-col justify-center items-center gap-2'>
             <div className="flex flex-col items-center gap-5 p-8 rounded-xl bg-white w-80 text-black">
                 {/* joining with a code */}
                 <div className='flex flex-col gap-2 w-50'>
@@ -47,6 +46,7 @@ export default function InputBox() {
                     >Create Room</button>
                 </div>
             </div>
+            <p className='text-white font-semibold text-lg'>Create your own room or join with a room code</p>
         </div>
     );
 }

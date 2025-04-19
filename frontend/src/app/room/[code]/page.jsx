@@ -13,11 +13,18 @@ export default function Page({ params }) {
     const [localTracks, setLocalTracks] = useState([]);
     const [remoteParticipants, setRemoteParticipants] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
+    const [shareLink, setLink] = useState('')
 
     const user = useSelector((state) => state.user.userinfo);
     const load = useSelector((state) => state.user.load)
     console.log("user", user);
     console.log("load ",load);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+          setLink(`${window.location.origin}/room/${code}`);
+        }
+      }, [code]);
 
     useEffect(() => {
         if (!load && !user) {
@@ -30,7 +37,7 @@ export default function Page({ params }) {
         setRoom(code)
     },[code])
 
-    const identity = user ? user.fullname: "user";
+    const identity = user ? user.username: "user";
     console.log("user ", identity)
     const baseUrl = "https://chat-ah4i.onrender.com";   
     
@@ -96,10 +103,10 @@ export default function Page({ params }) {
         console.log(`Participant connected: ${participant.identity}`);
         participant.tracks.forEach((publication) => {
             if (publication.isSubscribed) {
-                handleTrackSubscribed(publication.track);
+                handleTrackSubscribed(publication.track, participant.identity);
             }
         });
-        participant.on('trackSubscribed', handleTrackSubscribed);
+        participant.on('trackSubscribed', (track) => handleTrackSubscribed(track, participant.identity));
         participant.on('trackUnsubscribed', handleTrackUnsubscribed);
     };
 
@@ -110,10 +117,10 @@ export default function Page({ params }) {
         );
     };
 
-    const handleTrackSubscribed = (track) => {
+    const handleTrackSubscribed = (track, identity) => {
         setRemoteParticipants((prevParticipants) => [
             ...prevParticipants,
-            { track },
+            { track, identity },
         ]);
     };
 
@@ -129,28 +136,44 @@ export default function Page({ params }) {
         }
     };
 
+    const handleCopy = () => {
+        console.log("shareLink ", shareLink)
+        navigator.clipboard.writeText(shareLink);
+        alert('Link copied to clipboard!');
+    };
+
     if(load) return <div className="min-h-screen flex justify-center items-center">Loading......</div>
     if(!user)return <div className="min-h-screen flex justify-center items-center">Redirecting......</div>
     
     return (
         <div>
         <div><Nav/></div>
-        <div className='bg-black min-h-[calc(100vh-80px)] w-screen p-5'>
-            <p className='text-white font-bold text-3xl text-center mb-5'>Room Code is <span className='italic font-normal font-serif'>{code}</span></p>
+        <div className='bg-black min-h-[calc(100vh-80px)] w-screen p-2'>
+            <div className="flex justify-center"><button className="bg-white p-2 rounded-xl cursor-pointer" onClick={handleCopy}>Copy room link</button></div>
             <div>
-                <div id="remote-video-container" className='border w-[320px] m-1'>
-                    {remoteParticipants.map(({ track }, index) =>
+
+                {/* ***** remote participant ***** */}
+                <div id="remote-video-container" className='border m-1'>
+                    {remoteParticipants.map(({ track, identity, }, index) =>
                         track.kind === 'video' ? (
+                        <div key={index} className="w-[330px] border rounded-xl p-1 bg-white">
+                        <p>{identity}</p>
                         <video key={index}
                             ref={(video) => {
-                                if (video) {
-                                    video.srcObject = new MediaStream([track.mediaStreamTrack]);
-                                    video.play();
+                                if(video){
+                                    const stream = new MediaStream([track.mediaStreamTrack]);
+                                    video.srcObject = stream;
+                                    video.onloadedmetadata = () => {
+                                      video.play().catch((e) => {
+                                        console.warn("Auto-play was prevented:", e);
+                                      });
+                                    };
                                 }
                             }}
                             width="320"
                             height="240"
                         />
+                        </div>
                         ) : 
                         track.kind === 'audio' ? (
                         <audio key={index}
@@ -165,15 +188,21 @@ export default function Page({ params }) {
                     )}
                 </div>
 
-                <div className='w-[330px] border p-1'>
-                    <div id="local-video-container" className='w-[320px] mb-1'>
+                {/* ***** local participant ***** */}
+                <div className='w-[330px] border rounded-xl p-1 bg-white'>
+                    <div id="local-video-container" className='mb-1 rounded-xl'>
                         {localTracks.map((track, index) =>
                         track.kind === 'video' ? (
                         <video key={index}
                             ref={(video) => {
-                                if (video) {
-                                    video.srcObject = new MediaStream([track.mediaStreamTrack]);
-                                    video.play();
+                                if(video){
+                                    const stream = new MediaStream([track.mediaStreamTrack]);
+                                    video.srcObject = stream;
+                                    video.onloadedmetadata = () => {
+                                      video.play().catch((e) => {
+                                        console.warn("Auto-play was prevented:", e);
+                                      });
+                                    };
                                 }
                             }}
                             width="320"
@@ -183,15 +212,19 @@ export default function Page({ params }) {
                         ) : null
                         )}
                     </div>
-                    <div className={`flex ${isConnected ? 'justify-end' : 'justify-start'}`}>
-                    {!isConnected ? (<button onClick={fetchToken} disabled={isConnected}
-                    className='px-6 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500'>
+                    <div>
+                        {isConnected ? 
+                        (<div className="flex items-center justify-between">
+                            <p className="text-black">{identity?identity:null}</p>
+                            <button onClick={handleLeaveRoom}
+                             className="p-2 rounded-xl bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer">
+                            Leave Room</button>
+                        </div>):
+                        (<button onClick={fetchToken} disabled={isConnected}
+                        className='px-6 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500'>
                         Start Video Call
-                    </button>):null}
-                    {isConnected ? (<button onClick={handleLeaveRoom}
-                    className="px-6 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer">
-                        Leave Room
-                    </button>):null}
+                        </button>)
+                        }
                     </div>
                 </div>
             </div>

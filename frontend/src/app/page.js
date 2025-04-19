@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#3d5769]">
       {loading ? <div className='text-white font-bold text-xl'>Loading.....</div> : 
-      <form onSubmit={handleLogin} className="space-y-4 p-8 rounded-xl bg-white w-1/3">
+      <form onSubmit={handleLogin} className="space-y-4 p-8 rounded-xl bg-white w-80">
         <h2 className="text-2xl font-bold">Login</h2>
         <input type="username" placeholder="enter your username" required
           className="border p-2 rounded-lg w-full" value={username} onChange={e => setUsername(e.target.value)} />

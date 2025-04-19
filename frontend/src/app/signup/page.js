@@ -30,7 +30,7 @@ export default function Page() {
   }
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#3d5769]">
-        <form onSubmit={handleSignup} className="space-y-4 p-8 rounded-xl bg-white w-1/3">
+        <form onSubmit={handleSignup} className="space-y-4 p-8 rounded-xl bg-white w-80">
           <h2 className="text-2xl font-bold text-center">Create your account</h2>
           <input type="fullname" placeholder="enter your full name" required
           className="border rounded-lg p-2 w-full" value={fullname} onChange={e => setFullname(e.target.value)} />
