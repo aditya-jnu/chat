@@ -7,7 +7,7 @@ import { setUserinfo } from '@/components/redux/slices/userslice';
 import Link from 'next/link';
 
 export default function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://chat-ah4i.onrender.com";
+  const baseUrl = "https://chat-ah4i.onrender.com";
   const router = useRouter();
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
@@ -19,6 +19,7 @@ export default function Home() {
     e.preventDefault();
     setLoading(true)
     try{
+      console.log("Hi ")
       const response = await axios.post(`${baseUrl}/api/v1/signin`,{
         username:username, 
         password:password

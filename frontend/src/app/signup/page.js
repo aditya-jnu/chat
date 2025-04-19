@@ -4,7 +4,7 @@ import axios from 'axios'
 import Link from 'next/link';
 
 export default function Page() {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://chat-ah4i.onrender.com";
+  const baseUrl = "https://chat-ah4i.onrender.com";
   const [fullname, setFullname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
