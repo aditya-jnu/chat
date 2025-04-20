@@ -1,7 +1,5 @@
 # Video Chat App
 ##### Live Deployed Link: https://chat-one-beta-74.vercel.app/
-##### Live Demo Video: https://youtu.be/1-WHqa8vvlU
-##### Code Walkthrough Video: https://youtu.be/Ww2a5UekL-M
 
 
 A full-stack web application that allows users to sign up, sign in, create or join video call rooms using Twilio, and securely manage user data with JWT and bcrypt. The app is built using **Next.js** for the frontend, **Express.js** for the backend, and **MongoDB** for data persistence.
